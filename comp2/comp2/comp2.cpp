@@ -3,31 +3,57 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <cstdlib>
+
 
 using namespace std;
+using namespace std::chrono;
 
+void SelectionSort(vector <int> & array, int n) {
 
-void SelectionSort(int array[], int n) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="n"></param>
+    int i, j, minIndex;
+    
+    for (i = 0; i < n - 1; i++) {
+        minIndex = i;
+        for (j = i + 1; j < n; j++) {
+            if (array[j] < array[minIndex])
+                minIndex = j;
+        }
+        if (minIndex != i) {
+            swap(array[minIndex], array[i]);
+        }
+    }
 
 
 
 }
 
 //recursive
-void QuickSort(int array[], int low, int high) {
+void QuickSort(vector<int>& array, int start, int end) {
 
-    //base case
-    if (low < high) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    if (start < end) {
 
-        int pivot = array[low];
-        int left = low + 1;
-        int right = high;
+        int pivot = array[start];
+        int left = start + 1;
+        int right = end;
 
         while (left <= right) {
-            while (left <= high && array[left] <= pivot) {
+            while (left <= end && array[left] <= pivot) {
                 left++;
             }
-            while (right >= low && array[right] > pivot) {
+            while (right >= start && array[right] > pivot) {
                 right--;
             }
             if (left < right) {
@@ -37,23 +63,31 @@ void QuickSort(int array[], int low, int high) {
             }
         }
 
-        int temp = array[low];
-        array[low] = array[right];
+        int temp = array[start];
+        array[start] = array[right];
         array[right] = temp;
 
-        QuickSort(array, low, right - 1);
-        QuickSort(array, right + 1, high);
+        QuickSort(array, start, right - 1);
+        QuickSort(array, right + 1, end);
     }
 }
 
-void Merge(int array[], int low, int mid, int high) {
-    int n1 = mid - low + 1;
-    int n2 = high - mid;
+void Merge(vector<int>& array, int start, int mid, int end) {
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="start"></param>
+    /// <param name="mid"></param>
+    /// <param name="end"></param>
+    int n1 = mid - start + 1;
+    int n2 = end - mid;
 
     int* left = new int[n1];
     int* right = new int[n2];
     for (int i = 0; i < n1; i++) {
-        left[i] = array[low + i];
+        left[i] = array[start + i];
     }
     for (int i = 0; i < n2; i++) {
         right[i] = array[mid + 1 + i];
@@ -61,7 +95,7 @@ void Merge(int array[], int low, int mid, int high) {
 
     int i = 0;
     int j = 0;
-    int k = low;
+    int k = start;
 
 
     while (i < n1 && j < n2) {
@@ -91,15 +125,22 @@ void Merge(int array[], int low, int mid, int high) {
     delete[] right;
 }
 //recursive
-void MergeSort( int array[], int low,int high) {
 
-    if (low < high) {
-        int mid = low + (high - low) / 2;
+void MergeSort(vector<int>& array, int start,int end) {
 
-        MergeSort(array, low, mid);
-        MergeSort(array, mid + 1, high);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    if (start < end) {
+        int mid = start + (end - start) / 2;
 
-        Merge(array, low, mid, high);
+        MergeSort(array, start, mid);
+        MergeSort(array, mid + 1, end);
+
+        Merge(array, start, mid, end);
     }
 }
 
@@ -107,38 +148,96 @@ void MergeSort( int array[], int low,int high) {
 
 int main()
 {
-    int array[] = {5, 8, 4, 9, 2, 3, 1, 7, 6};
-    int size = sizeof(array) / sizeof(array[0]);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    int mili;
+   
+    cout << "do you want the array to be 10 '1' 100 '2' 1000 '3' 10000 '4': ";
+    cin >> mili;
+
+    int arraySize = 0;
+    if (mili == 1) {
+        arraySize = 10;
+    }
+    else if (mili == 2) {
+        arraySize = 100;
+    }
+    else if (mili == 3) {
+        arraySize = 1000;
+    }
+    else if (mili == 4) {
+        arraySize = 10000;
+    }
+    
+    vector<int> array(arraySize); 
+
+    for (int i = 0; i < arraySize; i++) {
+        array[i] = rand() % 1000;
+    }
+
+    
     char choice;
 
     cout << "please choose an algorythm, q is quicksort, m is merge and s is selectionsort: ";
     cin >> choice;
     
 
-
     if (choice == 'q') {
 
-        QuickSort(array, 0, size - 1);
+        auto begin = high_resolution_clock::now();
 
-        for (int i = 0; i < size; i++) {
+        QuickSort(array, 0, arraySize-1);
+
+        for (int i = 0; i < arraySize; i++) {
             cout << array[i] << " ";
         }
         cout << endl;
+
+        auto end = high_resolution_clock::now();
+
+        auto elapsed = duration_cast<milliseconds>(end - begin);
+        cout << endl << "Time taken by quicksort function: " << elapsed.count() << " milliseconds" << endl;
+        
     }
+
+
     else if (choice == 'm') {
 
-        MergeSort(array, 0, size - 1);
+        auto begin = high_resolution_clock::now();
 
-        for (int i = 0; i < size; i++) {
+        MergeSort(array, 0, arraySize - 1);
+
+        for (int i = 0; i < arraySize; i++) {
             cout << array[i] << " ";
         }
         cout << endl;
+        
+        auto end = high_resolution_clock::now();
+
+        auto elapsed = duration_cast<milliseconds>(end - begin);
+        cout << endl << "Time taken by quicksort function: " << elapsed.count() << " milliseconds" << endl;
     }
+
+
     else if (choice == 's') {
-        //something
+        auto begin = high_resolution_clock::now();
+
+        SelectionSort(array, arraySize);
+
+        for (int i = 0; i < arraySize; i++) {
+            cout << array[i] << " ";
+        }
+        cout << endl;
+
+        auto end = high_resolution_clock::now();
+
+        auto elapsed = duration_cast<milliseconds>(end - begin);
+        cout << endl << "Time taken by quicksort function: " << elapsed.count() << " milliseconds" << endl;
     }
     
-
     return 0;
 }
 
