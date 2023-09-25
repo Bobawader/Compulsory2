@@ -7,13 +7,14 @@
 using namespace std;
 using namespace std::chrono;
 
-void SelectionSort(vector <int> & array, int n) {
-
-    /// <summary>
+/// <summary>
     /// simple sorting system selecting smallest from the largest
     /// </summary>
     /// <param name="array">array in question</param>
     /// <param name="n">size</param>
+void SelectionSort(vector <int> & array, int n) {
+
+    
     int i, j, minIndex;
     
     for (i = 0; i < n - 1; i++) {
@@ -31,15 +32,15 @@ void SelectionSort(vector <int> & array, int n) {
 
 }
 
-
-void QuickSort(vector<int>& array, int start, int end) {
-
-    /// <summary>
+/// <summary>
     /// sorting algorythm which is recursive and divides and conqers
     /// </summary>
     /// <param name="array">array you wish to sort</param>
     /// <param name="start">starting index</param>
     /// <param name="end">end index</param>
+void QuickSort(vector<int>& array, int start, int end) {
+
+    
     if (start < end) {
 
         int pivot = array[start];
@@ -69,15 +70,16 @@ void QuickSort(vector<int>& array, int start, int end) {
     }
 }
 
-void Merge(vector<int>& array, int start, int mid, int end) {
-
-    /// <summary>
+/// <summary>
     /// the brain behind the mergesort function dividing and conqering the array
     /// </summary>
     /// <param name="array"> array you wish to sort</param>
     /// <param name="start">start index</param>
     /// <param name="mid">middle index</param>
     /// <param name="end">end index</param>
+void Merge(vector<int>& array, int start, int mid, int end) {
+
+    
     int n1 = mid - start + 1;
     int n2 = end - mid;
 
@@ -122,15 +124,15 @@ void Merge(vector<int>& array, int start, int mid, int end) {
     delete[] right;
 }
 
-
+/// <summary>
+/// recursive sorting function that uses the merge fuction to sort an vector array.
+/// </summary>
+/// <param name="array">the array you wish to sort</param>
+/// <param name="start">start index</param>
+/// <param name="end">end index</param>
 void MergeSort(vector<int>& array, int start,int end) {
 
-    /// <summary>
-    /// recursive sorting function that uses the merge fuction to sort an vector array.
-    /// </summary>
-    /// <param name="array">the array you wish to sort</param>
-    /// <param name="start">start index</param>
-    /// <param name="end">end index</param>
+    
     if (start < end) {
         int mid = start + (end - start) / 2;
 
